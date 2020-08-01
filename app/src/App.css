@@ -5,3 +5,6 @@ svg {
   height: 100vh;
   background: #eee;
 }
+.links line {
+  stroke: #aaa;
+}
