@@ -1,14 +1,15 @@
-import React, {useRef, useEffect, useState, useCallback, useMemo} from 'react';
+import React from 'react';
 import './App.css';
-import Graph from "./Components/Graph";
+import { BrowserRouter as Router} from "react-router-dom";
+import Routes from "./Components/Routes";
 
 
 function App () {
-    console.log('app test');
-
-
+    //<Graph dimensions={{height: 700, width: 700}}/>
     return(
-            <Graph dimensions={{height: 700, width: 700}}/>
+        <Router>
+            <Routes/>
+        </Router>
     )
 }
 
