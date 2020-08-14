@@ -91,8 +91,23 @@ const Graph = ({dimensions}) => {
             .selectAll("circle")
             .data(nodes)
             .enter().append("circle")
-            .attr("r", 30)
-            .attr("cursor","grab")
+            .attr("r", 50)
+            .on("click", () => console.log('test'))
+            .call(drag()
+                .on("start", dragStarted)
+                .on("drag", dragged)
+                .on("end", dragEnded));
+
+        const text = svg.append("g")
+            .attr("class", "text")
+            .selectAll("text")
+            .data(nodes)
+            .enter().append("text")
+            .style("fill", "magenta")
+            .style("font-size", "1.5em")
+            .attr("dx", "-1.5em")
+            .attr("dy", ".35em")
+            .text(function(d) { return d.id; })
             .call(drag()
                 .on("start", dragStarted)
                 .on("drag", dragged)
@@ -100,6 +115,7 @@ const Graph = ({dimensions}) => {
 
         node.append("title")
             .text(function(d) { return d.id; });
+
 
         sim
             .force("link")
@@ -122,6 +138,10 @@ const Graph = ({dimensions}) => {
             node
                 .attr("cx", function(d) { return d.x; })
                 .attr("cy", function(d) { return d.y; });
+
+            text
+                .attr("x", function(d) { return d.x; })
+                .attr("y", function(d) { return d.y; });
         }
 
         function dragStarted(d) {
@@ -141,7 +161,7 @@ const Graph = ({dimensions}) => {
             d.fy = null;
         }
 
-    });
+    },[]);
 
     useEffect(() => {
             createGraph(nodes,edges,dimensions);

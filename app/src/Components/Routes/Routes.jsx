@@ -7,7 +7,10 @@ function Routes() {
     return (
         <>
             <Switch>
-                <Route path="/edit-graph">
+                <Route path="/edit-node">
+
+                </Route>
+                <Route path="/edit-edge">
 
                 </Route>
                 <Route exact path="/">
