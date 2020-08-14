@@ -1,5 +1,6 @@
 import React, {useRef, useEffect, useState, useCallback, useMemo} from 'react';
 import {
+    zoom,
     drag,
     select,
     forceLink,
@@ -71,22 +72,28 @@ const Graph = ({dimensions}) => {
                 dimensions.height
             ]);
 
+        const g = svg.append("g");
+
+        svg.call(zoom()
+            .extent([[0, 0], [dimensions.width, dimensions.height]])
+            .scaleExtent([1, 8])
+            .on("zoom", () => g.attr("transform", event.transform)));
 
         const sim = forceSimulation(nodes)
             .force('charge', forceManyBody())
             .force('center', forceCenter(50, 50))
             .force('link', forceLink().id(function(d) { return d.id; }))
             .force('collision', forceCollide().radius(function(d) {
-                return d.radius || 50
+                return d.radius || 70
             }));
 
-        const link = svg.append("g")
+        const link = g.append("g")
             .attr("class", "links")
             .selectAll("line")
             .data(edges)
             .enter().append("line");
 
-        const node = svg.append("g")
+        const node = g.append("g")
             .attr("class", "nodes")
             .selectAll("circle")
             .data(nodes)
@@ -98,7 +105,7 @@ const Graph = ({dimensions}) => {
                 .on("drag", dragged)
                 .on("end", dragEnded));
 
-        const text = svg.append("g")
+        const text = g.append("g")
             .attr("class", "text")
             .selectAll("text")
             .data(nodes)
