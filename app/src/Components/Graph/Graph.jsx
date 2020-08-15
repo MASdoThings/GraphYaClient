@@ -11,6 +11,7 @@ import {
     forceCenter
 } from "d3";
 
+
 const Graph = ({dimensions}) => {
     const svgRef = useRef();
 
@@ -64,7 +65,9 @@ const Graph = ({dimensions}) => {
 
     const createGraph = useCallback((nodes,edges,dimensions) => {
 
+
         const svg = select(svgRef.current)
+            .style("background","white")
             .attr("viewBox", [
                 -dimensions.width / 2,
                 -dimensions.height / 2,
@@ -84,7 +87,7 @@ const Graph = ({dimensions}) => {
             .force('center', forceCenter(50, 50))
             .force('link', forceLink().id(function(d) { return d.id; }))
             .force('collision', forceCollide().radius(function(d) {
-                return d.radius || 70
+                return d.r || 70
             }));
 
         const link = g.append("g")
@@ -98,22 +101,27 @@ const Graph = ({dimensions}) => {
             .selectAll("circle")
             .data(nodes)
             .enter().append("circle")
-            .attr("r", 50)
-            .on("click", () => console.log('test'))
+            .attr("r", (d) => d.r ? d.r : 50)
+            .style("fill",(d) => d.group === 2 ? "#ffefd6" : "#c3eaea")
+            .on("mouseover", startHover)
+            .on("mouseout", stopHover)
             .call(drag()
                 .on("start", dragStarted)
                 .on("drag", dragged)
                 .on("end", dragEnded));
+
 
         const text = g.append("g")
             .attr("class", "text")
             .selectAll("text")
             .data(nodes)
             .enter().append("text")
-            .style("fill", "magenta")
+            .style("fill", "black")
             .style("font-size", "1.5em")
             .attr("dx", "-1.5em")
             .attr("dy", ".35em")
+            .on("mouseover", startHover)
+            .on("mouseout", stopHover)
             .text(function(d) { return d.id; })
             .call(drag()
                 .on("start", dragStarted)
@@ -122,7 +130,6 @@ const Graph = ({dimensions}) => {
 
         node.append("title")
             .text(function(d) { return d.id; });
-
 
         sim
             .force("link")
@@ -134,7 +141,27 @@ const Graph = ({dimensions}) => {
             .on("tick", ticked);
 
 
+        function startHover(d) {
+            const index = this.__data__.index;
+            const curNode = svgRef.current.childNodes[0].childNodes[1].childNodes[index];
+            const curText = svgRef.current.childNodes[0].childNodes[2].childNodes[index];
 
+            select(curNode).transition()
+                .attr("r", d.r ? d.r + 20 : 70);
+            select(curText).transition()
+                .style("fill","#d2088d");
+        }
+        function stopHover(d) {
+            const index = this.__data__.index;
+            const curNode = svgRef.current.childNodes[0].childNodes[1].childNodes[index];
+            const curText = svgRef.current.childNodes[0].childNodes[2].childNodes[index];
+
+            select(curNode).transition()
+                .attr("r", d.r ? d.r - 10 : 50);
+
+            select(curText).transition()
+                .style("fill","black");
+        }
         function ticked() {
             link
                 .attr("x1", function(d) { return d.source.x; })
@@ -150,18 +177,15 @@ const Graph = ({dimensions}) => {
                 .attr("x", function(d) { return d.x; })
                 .attr("y", function(d) { return d.y; });
         }
-
         function dragStarted(d) {
             if (!event.active) sim.alphaTarget(0.3).restart();
             d.fx = d.x;
             d.fy = d.y;
         }
-
         function dragged(d) {
             d.fx = event.x;
             d.fy = event.y;
         }
-
         function dragEnded(d) {
             if (!event.active) sim.alphaTarget(0);
             d.fx = null;

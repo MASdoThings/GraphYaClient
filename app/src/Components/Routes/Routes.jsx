@@ -1,7 +1,7 @@
 import React from 'react';
 import {Switch, Route} from "react-router-dom";
 import FourOFour from "./404";
-import Graph from "../Graph";
+import MainDashboard from "../MainDashboard";
 
 function Routes() {
     return (
@@ -14,7 +14,7 @@ function Routes() {
 
                 </Route>
                 <Route exact path="/">
-                    <Graph dimensions={{height: 700, width: 700}}/>
+                    <MainDashboard />
                 </Route>
                 <Route path="*">
                     <FourOFour />
