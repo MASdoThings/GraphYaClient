@@ -1,66 +1,22 @@
-import React, {useRef, useEffect, useState, useCallback, useMemo} from 'react';
-import {
-    zoom,
-    drag,
-    select,
-    forceLink,
-    forceSimulation,
-    forceManyBody,
-    forceCollide,
-    event,
-    forceCenter
+import React, {useRef, useEffect, useCallback} from 'react';
+import { zoom,
+        drag,
+        select,
+        forceLink,
+        forceSimulation,
+        forceManyBody,
+        forceCollide,
+        event,
+        forceCenter
 } from "d3";
+import data from '../../dummyData';
 
 
 const Graph = ({dimensions}) => {
     const svgRef = useRef();
 
-    const nodes = [
-        {id: "Cravat", group: 1},
-        {id: "Count", group: 1},
-        {id: "OldMan", group: 1},
-        {id: "Lazare", group: 2},
-        {id: "Valdemar", group: 2},
-        {id: "Marguerite", group: 2},
-        {id: "Mme.deR", group: 2},
-    ];
-    const edges = [
-        {
-            source: "OldMan",
-            target: "Valdemar",
-            value: 1
-        },
-        {
-            source: "Count",
-            target: "Valdemar",
-            value: 2
-        },
-        {
-            source: "Cravat",
-            target: "Valdemar",
-            value: 1
-        },
-        {
-            source: "Lazare",
-            target: "Marguerite",
-            value: 1
-        },
-        {
-            source: "Lazare",
-            target: "Mme.deR",
-            value: 1
-        },
-        {
-            source: "Mme.deR",
-            target: "OldMan",
-            value: 1
-        },
-        {
-            source: "OldMan",
-            target: "Lazare",
-            value: 1
-        }
-    ];
+    const nodes = data.nodes;
+    const edges = data.edges;
 
 
     const createGraph = useCallback((nodes,edges,dimensions) => {

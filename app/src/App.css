@@ -8,3 +8,43 @@ svg {
 .links line {
   stroke: #aaa;
 }
+
+.dashboard {
+  display: flex;
+}
+
+.tool-bar {
+  order: 1;
+  flex-basis: 25%;
+  z-index: 99;
+  background: #f7f7f7;
+  padding: 10px 20px;
+}
+
+.graph-display {
+  order: 2;
+  flex-basis: 75%;
+}
+
+.MuiAccordionSummary-content {
+  font-size: 30px;
+  font-weight: 600;
+}
+.acc {
+  margin-bottom: 10px;
+  border-radius: 10px!important;
+  box-shadow: none!important;
+  background: none!important;
+}
+
+.MuiAccordion-root::before {
+  display: none;
+}
+
+.MuiAccordionDetails-root {
+  background: white;
+  padding: 10px!important;
+}
+.MuiSvgIcon-root {
+  background: none;
+}
