@@ -1,8 +1,12 @@
 import Graph from '../Graph';
-import React from "react";
+import React, {useContext} from "react";
 import ToolBar from "./ToolBar";
+import Context from "../Context";
 
 function MainDashboard(props) {
+    const test = useContext(Context);
+    console.log(test.test);
+
     return (
         <>
             <div className="dashboard">

@@ -7,7 +7,7 @@ function ToolBar(props) {
         {
             title: 'Nodes',
             tools: [
-                <Button variant="contained" color="" onClick={() => console.log('hi')}>
+                <Button variant="contained" key={'btn-node-1'} onClick={() => console.log('hi')}>
                     CREATE NODE
                 </Button>
             ]
@@ -15,7 +15,7 @@ function ToolBar(props) {
         {
             title: 'Edges',
             tools: [
-                <Button variant="contained" color="" onClick={() => console.log('hi')}>
+                <Button variant="contained"  key={'btn-edge-1'} onClick={() => console.log('hi')}>
                     CREATE EDGE
                 </Button>
             ]
@@ -25,8 +25,8 @@ function ToolBar(props) {
     return (
         <>
             {
-                sideBar.map((x) => {
-                    return  <Accordion className="acc">
+                sideBar.map((x,i) => {
+                    return  <Accordion className="acc" key={i+10}>
                         <AccordionSummary
                             expandIcon={<ExpandMoreIcon />}
                             id={`${x.title}-header`}

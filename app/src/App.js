@@ -1,15 +1,19 @@
-import React from 'react';
+import React, {useContext} from 'react';
 import './App.css';
 import { BrowserRouter as Router} from "react-router-dom";
 import Routes from "./Components/Routes";
-
+import Provider from "./Components/Context/Provider/Provider";
 
 function App () {
-    //<Graph dimensions={{height: 700, width: 700}}/>
+
     return(
+
         <Router>
-            <Routes/>
+            <Provider>
+                <Routes/>
+            </Provider>
         </Router>
+
     )
 }
 
