@@ -48,3 +48,14 @@ svg {
 .MuiSvgIcon-root {
   background: none;
 }
+
+.acc-data .MuiAccordionSummary-content{
+  font-size: 14px;
+  line-height: 26px;
+  display: flex;
+  flex-direction: column;
+}
+.data-title {
+  padding: 0 3px;
+}
+

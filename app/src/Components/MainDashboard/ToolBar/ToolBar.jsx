@@ -1,48 +1,45 @@
 import React from 'react';
-import Accordion from '@material-ui/core/Accordion';
-import AccordionSummary from '@material-ui/core/AccordionSummary';
-import AccordionDetails from '@material-ui/core/AccordionDetails';
+import {Button,Accordion,AccordionSummary,AccordionDetails} from '@material-ui/core'
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 
 function ToolBar(props) {
+    const sideBar = [
+        {
+            title: 'Nodes',
+            tools: [
+                <Button variant="contained" color="" onClick={() => console.log('hi')}>
+                    CREATE NODE
+                </Button>
+            ]
+        },
+        {
+            title: 'Edges',
+            tools: [
+                <Button variant="contained" color="" onClick={() => console.log('hi')}>
+                    CREATE EDGE
+                </Button>
+            ]
+        }
+    ];
+
     return (
         <>
-            <Accordion className="acc">
-                <AccordionSummary
-                    expandIcon={<ExpandMoreIcon />}
-                    aria-controls="panel1a-content"
-                    id="panel1a-header"
-                >
-                    NODES
-                </AccordionSummary>
-                <AccordionDetails>
-                        test
-                </AccordionDetails>
-            </Accordion>
-            <Accordion className="acc">
-                <AccordionSummary
-                    expandIcon={<ExpandMoreIcon />}
-                    aria-controls="panel2a-content"
-                    id="panel2a-header"
-                >
-                    EDGES
-                </AccordionSummary>
-                <AccordionDetails>
-                       test
-                </AccordionDetails>
-            </Accordion>
-            <Accordion className="acc">
-                <AccordionSummary
-                    expandIcon={<ExpandMoreIcon />}
-                    aria-controls="panel3a-content"
-                    id="panel3a-header"
-                >
-                    MATH
-                </AccordionSummary>
-                <AccordionDetails>
-                    test
-                </AccordionDetails>
-            </Accordion>
+            {
+                sideBar.map((x) => {
+                    return  <Accordion className="acc">
+                        <AccordionSummary
+                            expandIcon={<ExpandMoreIcon />}
+                            id={`${x.title}-header`}
+                        >
+                            {x.title}
+                        </AccordionSummary>
+                        <AccordionDetails>
+                            {x.tools.map(x => x)}
+                        </AccordionDetails>
+                    </Accordion>
+                })
+            }
+
         </>
     );
 }
