@@ -1,4 +1,4 @@
-import React, {useRef, useEffect, useCallback} from 'react';
+import React, {useRef, useEffect, useCallback, useContext} from 'react';
 import { zoom,
         drag,
         select,
@@ -9,14 +9,15 @@ import { zoom,
         event,
         forceCenter
 } from "d3";
-import data from '../../dummyData';
+import Context from "../Context";
 
 
 const Graph = ({dimensions}) => {
+    const context = useContext(Context);
     const svgRef = useRef();
 
-    const nodes = data.nodes;
-    const edges = data.edges;
+    const nodes = context.nodes;
+    const edges = context.edges;
 
 
     const createGraph = useCallback((nodes,edges,dimensions) => {

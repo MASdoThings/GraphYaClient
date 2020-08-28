@@ -15,7 +15,7 @@ svg {
 
 .tool-bar {
   order: 1;
-  flex-basis: 25%;
+  flex-basis: 15%;
   z-index: 99;
   background: #f7f7f7;
   padding: 10px 20px;
@@ -23,7 +23,7 @@ svg {
 
 .graph-display {
   order: 2;
-  flex-basis: 75%;
+  flex-basis: 85%;
 }
 
 .MuiAccordionSummary-content {

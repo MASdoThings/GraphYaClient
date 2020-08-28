@@ -1,24 +1,26 @@
-import React from 'react';
-import {Button,Accordion,AccordionSummary,AccordionDetails} from '@material-ui/core'
+import React, {useState} from 'react';
+import {Accordion,AccordionSummary,AccordionDetails} from '@material-ui/core'
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
+import NodesTools from "./NodesTools";
+import DialogCst from "../../Basic/DialogCst";
+import EdgesTools from  "./EdgesTools";
 
 function ToolBar(props) {
+    const [dialog,setDialog] = useState({
+        open: false,
+        content: []
+    });
+
+    console.log('check');
+
     const sideBar = [
         {
             title: 'Nodes',
-            tools: [
-                <Button variant="contained" key={'btn-node-1'} onClick={() => console.log('hi')}>
-                    CREATE NODE
-                </Button>
-            ]
+            details: <NodesTools setDialog={setDialog}/>
         },
         {
             title: 'Edges',
-            tools: [
-                <Button variant="contained"  key={'btn-edge-1'} onClick={() => console.log('hi')}>
-                    CREATE EDGE
-                </Button>
-            ]
+            details: <EdgesTools setDialog={setDialog}/>
         }
     ];
 
@@ -34,11 +36,12 @@ function ToolBar(props) {
                             {x.title}
                         </AccordionSummary>
                         <AccordionDetails>
-                            {x.tools.map(x => x)}
+                            {x.details}
                         </AccordionDetails>
                     </Accordion>
                 })
             }
+            <DialogCst open={dialog.open} setDialog={setDialog} content={dialog.content}/>
 
         </>
     );
