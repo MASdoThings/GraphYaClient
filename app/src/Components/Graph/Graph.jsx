@@ -1,4 +1,4 @@
-import React, {useRef, useEffect, useCallback, useContext} from 'react';
+import React, {useRef, useEffect, useCallback, useContext,useState} from 'react';
 import { zoom,
         drag,
         select,
@@ -14,14 +14,17 @@ import Context from "../Context";
 
 const Graph = ({dimensions}) => {
     const context = useContext(Context);
-    const svgRef = useRef();
+    let svgRef = useRef();
+    const [graph, setGraph] = useState({});
 
     const nodes = context.nodes;
     const edges = context.edges;
 
+    console.log('check');
+
 
     const createGraph = useCallback((nodes,edges,dimensions) => {
-
+        console.log(svgRef.current);
 
         const svg = select(svgRef.current)
             .style("background","white")
@@ -59,7 +62,7 @@ const Graph = ({dimensions}) => {
             .data(nodes)
             .enter().append("circle")
             .attr("r", (d) => d.r ? d.r : 50)
-            .style("fill",(d) => d.group === 2 ? "#ffefd6" : "#c3eaea")
+            .style("fill",(d) => d.group === "2" ? "#ffefd6" : "#c3eaea")
             .on("mouseover", startHover)
             .on("mouseout", stopHover)
             .call(drag()
@@ -79,14 +82,14 @@ const Graph = ({dimensions}) => {
             .attr("dy", ".35em")
             .on("mouseover", startHover)
             .on("mouseout", stopHover)
-            .text(function(d) { return d.id; })
+            .text(function(d) { return d.name; })
             .call(drag()
                 .on("start", dragStarted)
                 .on("drag", dragged)
                 .on("end", dragEnded));
 
         node.append("title")
-            .text(function(d) { return d.id; });
+            .text(function(d) { return d.name; });
 
         sim
             .force("link")
@@ -152,8 +155,9 @@ const Graph = ({dimensions}) => {
     },[]);
 
     useEffect(() => {
+            //svgRef = null;
             createGraph(nodes,edges,dimensions);
-    },[createGraph, dimensions, edges, nodes]);
+    },[nodes,edges,dimensions]);
 
     return(
         <svg ref={svgRef}/>

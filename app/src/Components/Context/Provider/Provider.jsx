@@ -15,6 +15,7 @@ function Provider(props) {
             {
                 nodes: data.nodes,
                 edges: data.edges,
+                data:data,
                 setData: setData,
             }
         }

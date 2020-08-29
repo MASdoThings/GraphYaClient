@@ -1,48 +1,48 @@
 
 const data = {
   nodes: [
-    {id: "Cravat", group: 1},
-    {id: "Count", group: 1},
-    {id: "OldMan", group: 1},
-    {id: "Lazare", group: 2},
-    {id: "Valdemar", group: 2},
-    {id: "Marguerite", group: 2},
-    {id: "Mme.deR", group: 2},
+    {id: "0", name: "Cravat", group: "1"},
+    {id: "1", name: "Count", group: "1"},
+    {id: "2", name: "OldMan", group: "1"},
+    {id: "3", name: "Lazare", group: "2"},
+    {id: "4", name: "Valdemar", group: "2"},
+    {id: "5", name: "Marguerite", group: "2"},
+    {id: "6", name: "Mme.deR", group: "2"},
   ],
   edges: [
     {
-      source: "OldMan",
-      target: "Valdemar",
+      source: "0",
+      target: "1",
       value: 1
     },
     {
-      source: "Count",
-      target: "Valdemar",
+      source: "2",
+      target: "3",
       value: 2
     },
     {
-      source: "Cravat",
-      target: "Valdemar",
+      source: "3",
+      target: "4",
       value: 1
     },
     {
-      source: "Lazare",
-      target: "Marguerite",
+      source: "4",
+      target: "5",
       value: 1
     },
     {
-      source: "Lazare",
-      target: "Mme.deR",
+      source: "5",
+      target: "6",
       value: 1
     },
     {
-      source: "Mme.deR",
-      target: "OldMan",
+      source: "6",
+      target: "0",
       value: 1
     },
     {
-      source: "OldMan",
-      target: "Lazare",
+      source: "6",
+      target: "4",
       value: 1
     }
   ]

@@ -8,7 +8,7 @@ import EdgesTools from  "./EdgesTools";
 function ToolBar(props) {
     const [dialog,setDialog] = useState({
         open: false,
-        content: []
+        content: null
     });
 
     console.log('check');

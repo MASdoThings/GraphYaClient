@@ -6,7 +6,7 @@ function DialogCst({open,setDialog,content}) {
 
     return (
         <div>
-            <Dialog open={open} onClose={()=>setDialog({open:false,content:[]})} aria-labelledby="dialog-title">
+            <Dialog open={open} onClose={()=>setDialog({open:false,content:null})} aria-labelledby="dialog-title">
                 {content}
             </Dialog>
         </div>
