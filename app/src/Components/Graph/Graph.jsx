@@ -15,16 +15,15 @@ import Context from "../Context";
 const Graph = ({dimensions}) => {
     const context = useContext(Context);
     let svgRef = useRef();
-    const [graph, setGraph] = useState({});
+    const [svgstate, setSvg] = useState(null);
 
     const nodes = context.nodes;
     const edges = context.edges;
 
     console.log('check');
 
+    const createGraph = (nodes,edges,dimensions) => {
 
-    const createGraph = useCallback((nodes,edges,dimensions) => {
-        console.log(svgRef.current);
 
         const svg = select(svgRef.current)
             .style("background","white")
@@ -152,13 +151,15 @@ const Graph = ({dimensions}) => {
             d.fy = null;
         }
 
+    };
+
+    useEffect(() => {
+        createGraph(nodes,edges,dimensions);
     },[]);
 
     useEffect(() => {
-            //svgRef = null;
-            createGraph(nodes,edges,dimensions);
+        updateGraph(nodes,edges,dimensions);
     },[nodes,edges,dimensions]);
-
     return(
         <svg ref={svgRef}/>
     )
