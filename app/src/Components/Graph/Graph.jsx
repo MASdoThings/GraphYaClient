@@ -15,33 +15,25 @@ import Context from "../Context";
 const Graph = ({dimensions}) => {
     const context = useContext(Context);
     let svgRef = useRef();
-    const [svgstate, setSvg] = useState(null);
+    let gRef = useRef();
+    let linksRef = useRef([]);
 
     const nodes = context.nodes;
     const edges = context.edges;
 
     console.log('check');
 
-    const createGraph = (nodes,edges,dimensions) => {
+    const createGraph = (dimensions) => {
 
-
-        const svg = select(svgRef.current)
-            .style("background","white")
-            .attr("viewBox", [
-                -dimensions.width / 2,
-                -dimensions.height / 2,
-                dimensions.width,
-                dimensions.height
-            ]);
-
-        const g = svg.append("g");
+        const svg = select(svgRef.current);
+        const g = select(gRef.current);
 
         svg.call(zoom()
             .extent([[0, 0], [dimensions.width, dimensions.height]])
             .scaleExtent([1, 8])
             .on("zoom", () => g.attr("transform", event.transform)));
 
-        const sim = forceSimulation(nodes)
+        const sim = forceSimulation(context.nodes)
             .force('charge', forceManyBody())
             .force('center', forceCenter(50, 50))
             .force('link', forceLink().id(function(d) { return d.id; }))
@@ -49,21 +41,33 @@ const Graph = ({dimensions}) => {
                 return d.r || 70
             }));
 
-        const link = g.append("g")
-            .attr("class", "links")
-            .selectAll("line")
-            .data(edges)
-            .enter().append("line");
+
+        sim
+            .force("link")
+            .links(edges)
+            .distance(300);
+
+        console.log(edges);
+
+        context.setData({...context.data,edges:edges});
+
+        // const link = g.append("g")
+        //     .attr("class", "links")
+        //     .selectAll("line")
+        //     .data(edges)
+        //     .enter().append("line");
+
+
 
         const node = g.append("g")
             .attr("class", "nodes")
             .selectAll("circle")
-            .data(nodes)
+            .data(context.nodes)
             .enter().append("circle")
             .attr("r", (d) => d.r ? d.r : 50)
-            .style("fill",(d) => d.group === "2" ? "#ffefd6" : "#c3eaea")
-            .on("mouseover", startHover)
-            .on("mouseout", stopHover)
+            .style("fill",(d) => d.group === "2" ? "#cb68ff" : "#6ad6ea")
+            //.on("mouseover", startHover)
+            //.on("mouseout", stopHover)
             .call(drag()
                 .on("start", dragStarted)
                 .on("drag", dragged)
@@ -73,14 +77,14 @@ const Graph = ({dimensions}) => {
         const text = g.append("g")
             .attr("class", "text")
             .selectAll("text")
-            .data(nodes)
+            .data(context.nodes)
             .enter().append("text")
             .style("fill", "black")
             .style("font-size", "1.5em")
             .attr("dx", "-1.5em")
             .attr("dy", ".35em")
-            .on("mouseover", startHover)
-            .on("mouseout", stopHover)
+            //.on("mouseover", startHover)
+            //.on("mouseout", stopHover)
             .text(function(d) { return d.name; })
             .call(drag()
                 .on("start", dragStarted)
@@ -91,12 +95,7 @@ const Graph = ({dimensions}) => {
             .text(function(d) { return d.name; });
 
         sim
-            .force("link")
-            .links(edges)
-            .distance(300);
-
-        sim
-            .nodes(nodes)
+            .nodes(context.nodes)
             .on("tick", ticked);
 
 
@@ -122,11 +121,11 @@ const Graph = ({dimensions}) => {
                 .style("fill","black");
         }
         function ticked() {
-            link
-                .attr("x1", function(d) { return d.source.x; })
-                .attr("y1", function(d) { return d.source.y; })
-                .attr("x2", function(d) { return d.target.x; })
-                .attr("y2", function(d) { return d.target.y; });
+            // link
+            //     .attr("x1", function(d) { return d.source.x; })
+            //     .attr("y1", function(d) { return d.source.y; })
+            //     .attr("x2", function(d) { return d.target.x; })
+            //     .attr("y2", function(d) { return d.target.y; });
 
             node
                 .attr("cx", function(d) { return d.x; })
@@ -153,15 +152,36 @@ const Graph = ({dimensions}) => {
 
     };
 
-    useEffect(() => {
-        createGraph(nodes,edges,dimensions);
-    },[]);
+    console.log(linksRef)
 
     useEffect(() => {
-        updateGraph(nodes,edges,dimensions);
-    },[nodes,edges,dimensions]);
+        createGraph(dimensions);
+    },[]);
+
     return(
-        <svg ref={svgRef}/>
+        <svg viewBox={`
+        ${-dimensions.width / 2},
+        ${-dimensions.height / 2},
+        ${dimensions.width},
+        ${dimensions.height}
+        `} ref={svgRef}
+        >
+            <g className="display" ref={gRef}>
+                <g className="links" >
+                    {
+                        context.data.edges.map(edge => {
+                            return <line ref={linksRef}
+                                x1={edge.source.x}
+                                y1={edge.source.y}
+                                x2={edge.target.x}
+                                y2={edge.target.y}
+                                stroke="black"
+                            />
+                        })
+                    }
+                </g>
+            </g>
+        </svg>
     )
 };
 
