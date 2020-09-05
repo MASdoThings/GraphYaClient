@@ -16,14 +16,16 @@ const Graph = ({dimensions}) => {
     const context = useContext(Context);
     let svgRef = useRef();
     let gRef = useRef();
-    let linksRef = useRef([]);
+    let linksRef = useRef();
+    let circlesRef = useRef();
+    let textRef = useRef();
 
-    const nodes = context.nodes;
-    const edges = context.edges;
+    //const nodes = context.nodes;
+    //const edges = context.edges;
 
     console.log('check');
 
-    const createGraph = (dimensions) => {
+    const createGraph = useCallback((dimensions) => {
 
         const svg = select(svgRef.current);
         const g = select(gRef.current);
@@ -33,7 +35,7 @@ const Graph = ({dimensions}) => {
             .scaleExtent([1, 8])
             .on("zoom", () => g.attr("transform", event.transform)));
 
-        const sim = forceSimulation(context.nodes)
+        let sim = forceSimulation(context.nodes)
             .force('charge', forceManyBody())
             .force('center', forceCenter(50, 50))
             .force('link', forceLink().id(function(d) { return d.id; }))
@@ -41,56 +43,37 @@ const Graph = ({dimensions}) => {
                 return d.r || 70
             }));
 
-
+        console.log(context.nodes);
         sim
             .force("link")
-            .links(edges)
+            .links(context.edges)
             .distance(300);
 
-        //context.setData({...context.data,edges:edges});
         const link = select(linksRef.current)
             .selectAll("line")
-            .data(edges);
+            .data(context.edges);
 
-        // const link = g.append("g")
-        //     .attr("class", "links")
-        //     .selectAll("line")
-        //     .data(edges)
-        //     .enter().append("line");
 
-        const node = g.append("g")
-            .attr("class", "nodes")
+        const node = select(circlesRef.current)
             .selectAll("circle")
             .data(context.nodes)
-            .enter().append("circle")
-            .attr("r", (d) => d.r ? d.r : 50)
-            .style("fill",(d) => d.group === "2" ? "#cb68ff" : "#6ad6ea")
-            //.on("mouseover", startHover)
-            //.on("mouseout", stopHover)
+            .on("mouseover", startHover)
+            .on("mouseout", stopHover)
             .call(drag()
                 .on("start", dragStarted)
                 .on("drag", dragged)
                 .on("end", dragEnded));
 
-        const text = g.append("g")
-            .attr("class", "text")
+        const text = select(textRef.current)
             .selectAll("text")
             .data(context.nodes)
-            .enter().append("text")
-            .style("fill", "black")
-            .style("font-size", "1.5em")
-            .attr("dx", "-1.5em")
-            .attr("dy", ".35em")
-            //.on("mouseover", startHover)
-            //.on("mouseout", stopHover)
-            .text(function(d) { return d.name; })
+            .on("mouseover", startHover)
+            .on("mouseout", stopHover)
+
             .call(drag()
                 .on("start", dragStarted)
                 .on("drag", dragged)
                 .on("end", dragEnded));
-
-        node.append("title")
-            .text(function(d) { return d.name; });
 
         sim
             .nodes(context.nodes)
@@ -148,12 +131,12 @@ const Graph = ({dimensions}) => {
             d.fy = null;
         }
 
-    };
+    },[context.data]);
 
 
     useEffect(() => {
         createGraph(dimensions);
-    },[]);
+    },[context.data]);
     console.log(context.data);
     return(
         <svg viewBox={`
@@ -166,8 +149,33 @@ const Graph = ({dimensions}) => {
             <g className="display" ref={gRef}>
                 <g className="links" ref={linksRef}>
                     {
-                        context.data.edges.map(edge => {
+                        context.edges.map(edge => {
                             return <line stroke="black"/>
+                        })
+                    }
+                </g>
+                <g className="nodes" ref={circlesRef}>
+                    {
+                        context.nodes.map(node => {
+                            return <circle
+                                name={node.name}
+                                fill={node.group === "2" ? "#cb68ff" : "#6ad6ea"}
+                                r={node.r ? node.r : 50}
+                            />
+                        })
+                    }
+                </g>
+                <g className="text" ref={textRef}>
+                    {
+                        context.nodes.map(node => {
+                            return <text
+                                fill="black"
+                                fontSize="1.5em"
+                                dx="-1.5em"
+                                dy=".35em"
+                            >
+                                {node.name}
+                            </text>
                         })
                     }
                 </g>
