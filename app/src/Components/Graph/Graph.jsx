@@ -47,17 +47,16 @@ const Graph = ({dimensions}) => {
             .links(edges)
             .distance(300);
 
-        console.log(edges);
-
-        context.setData({...context.data,edges:edges});
+        //context.setData({...context.data,edges:edges});
+        const link = select(linksRef.current)
+            .selectAll("line")
+            .data(edges);
 
         // const link = g.append("g")
         //     .attr("class", "links")
         //     .selectAll("line")
         //     .data(edges)
         //     .enter().append("line");
-
-
 
         const node = g.append("g")
             .attr("class", "nodes")
@@ -72,7 +71,6 @@ const Graph = ({dimensions}) => {
                 .on("start", dragStarted)
                 .on("drag", dragged)
                 .on("end", dragEnded));
-
 
         const text = g.append("g")
             .attr("class", "text")
@@ -121,11 +119,11 @@ const Graph = ({dimensions}) => {
                 .style("fill","black");
         }
         function ticked() {
-            // link
-            //     .attr("x1", function(d) { return d.source.x; })
-            //     .attr("y1", function(d) { return d.source.y; })
-            //     .attr("x2", function(d) { return d.target.x; })
-            //     .attr("y2", function(d) { return d.target.y; });
+            link
+                .attr("x1", function(d) { return d.source.x })
+                .attr("y1", function(d) { return d.source.y })
+                .attr("x2", function(d) { return d.target.x })
+                .attr("y2", function(d) { return d.target.y });
 
             node
                 .attr("cx", function(d) { return d.x; })
@@ -152,12 +150,11 @@ const Graph = ({dimensions}) => {
 
     };
 
-    console.log(linksRef)
 
     useEffect(() => {
         createGraph(dimensions);
     },[]);
-
+    console.log(context.data);
     return(
         <svg viewBox={`
         ${-dimensions.width / 2},
@@ -167,16 +164,10 @@ const Graph = ({dimensions}) => {
         `} ref={svgRef}
         >
             <g className="display" ref={gRef}>
-                <g className="links" >
+                <g className="links" ref={linksRef}>
                     {
                         context.data.edges.map(edge => {
-                            return <line ref={linksRef}
-                                x1={edge.source.x}
-                                y1={edge.source.y}
-                                x2={edge.target.x}
-                                y2={edge.target.y}
-                                stroke="black"
-                            />
+                            return <line stroke="black"/>
                         })
                     }
                 </g>
