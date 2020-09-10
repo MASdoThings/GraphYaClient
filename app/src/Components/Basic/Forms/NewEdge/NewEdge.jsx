@@ -10,16 +10,16 @@ import Button from "@material-ui/core/Button";
 import Context from '../../../Context';
 import PropTypes from "prop-types";
 
-function NewNode({setDialog}) {
+function NewEdge({setDialog}) {
     const [value, setValue] = useState({name:'',group:''});
     const context = useContext(Context);
 
     const handleSubmit = (e) => {
         e.preventDefault();
-        console.log(context.nodes.concat([value]));
+        console.log(context.edges.concat([value]));
         context.setData({
             ...context.data,
-            nodes: context.nodes.concat([value]),
+            edges: context.edges.concat([value]),
         });
         setDialog({open:false,content:null})
     };
@@ -27,14 +27,14 @@ function NewNode({setDialog}) {
     return (
         <>
         <div style={{width:400,padding:40}}>
-            <DialogTitle id="form-dialog-title">NEW NODE</DialogTitle>
+            <DialogTitle id="form-dialog-title">NEW EDGE</DialogTitle>
             <form noValidate autoComplete="off" onSubmit={handleSubmit}>
             <DialogContent>
                 <DialogContentText>
                          <TextField  color="secondary"
                                      id="standard-basic"
                                      label="Name"
-                                     value={value.name}
+                                     // value={value.name}
                                      fullWidth
                                      onChange={(e) => {
                                          setValue({...value,
@@ -74,8 +74,8 @@ function NewNode({setDialog}) {
     );
 }
 
-NewNode.propTypes = {
+NewEdge.propTypes = {
     setDialog: PropTypes.func
 };
 
-export default NewNode;
+export default NewEdge;

@@ -12,7 +12,7 @@ function NodesTools({setDialog}) {
         <div>
             <Button
                 variant="contained"
-                color={'primary'}
+                color="primary"
                 size="large"
                 startIcon={<AddCircleOutlineIcon />}
                 onClick={() => setDialog({open:true,content:<NewNode setDialog={setDialog}/>})}
